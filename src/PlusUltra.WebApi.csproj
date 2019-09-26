@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="App.Metrics.AspNetCore" Version="3.1.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="3.1.0" />
+    <PackageReference Include="App.Metrics.Formatters.Prometheus" Version="3.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="2.2.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="2.2.4" />
+    <PackageReference Include="GitVersionTask" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="PlusUltra.Swagger" Version="0.1.2" />
+    <PackageReference Include="Flunt" Version="1.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
+  </ItemGroup>
+
+</Project>
