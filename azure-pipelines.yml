@@ -42,3 +42,10 @@ jobs:
       nuGetFeedType: 'external'
       publishFeedCredentials: 'nuget.org'
       verbosityPush: 'Normal'
+
+  - task: GitTag@5
+    inputs:
+      workingdir: '$(SYSTEM.DEFAULTWORKINGDIRECTORY)'
+      tagUser: 'alefcarlos'
+      tagEmail: 'alef.carlos@gmail.com'
+      tag: '$(GitVersion.NuGetVersionV2)'
