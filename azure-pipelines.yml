@@ -46,6 +46,7 @@ jobs:
   - task: GitTag@5
     inputs:
       workingdir: '$(SYSTEM.DEFAULTWORKINGDIRECTORY)'
-      tagUser: 'alefcarlos'
-      tagEmail: 'alef.carlos@gmail.com'
+      tagUser: 'VSTS'
+      tagEmail: ''
       tag: '$(GitVersion.NuGetVersionV2)'
+
