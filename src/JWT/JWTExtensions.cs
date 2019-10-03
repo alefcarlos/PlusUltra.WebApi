@@ -10,7 +10,7 @@ namespace PlusUltra.WebApi.JWT
 {
     public static class JWTExtensions
     {
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, Action<JwtBearerOptions> jwtConfigureOptions = null)
         {
             services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
             var tokenConfigurations = services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettings>>().Value;
@@ -40,6 +40,9 @@ namespace PlusUltra.WebApi.JWT
 
                                 ValidIssuer = tokenConfigurations.oidc.Authority
                             };
+
+                            if (jwtConfigureOptions != null)
+                                jwtConfigureOptions(options);
                         });
 
             // Ativa o uso do token como forma de autorizar o acesso

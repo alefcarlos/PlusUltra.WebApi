@@ -1,4 +1,6 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,13 @@ namespace PlusUltra.WebApi.Hosting
 {
     public abstract class StartupBase
     {
-        public StartupBase(IConfiguration configuration, ILoggerFactory loggerFactory, bool useAuthentication)
+        public StartupBase(IConfiguration configuration, ILoggerFactory loggerFactory, bool useAuthentication, Action<JwtBearerOptions> jwtConfigureOptions = null)
         {
             Configuration = configuration;
             this.loggerFactory = loggerFactory;
             this.logger = loggerFactory.CreateLogger<StartupBase>();
             this.useAuthentication = useAuthentication;
+            this.jwtConfigureOptions = jwtConfigureOptions;
         }
 
         protected readonly IConfiguration Configuration;
@@ -31,12 +34,13 @@ namespace PlusUltra.WebApi.Hosting
 
         private readonly ILoggerFactory loggerFactory;
         protected readonly ILogger<StartupBase> logger;
+        private readonly Action<JwtBearerOptions> jwtConfigureOptions;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             if (useAuthentication)
-                services.AddSecurity(Configuration);
+                services.AddSecurity(Configuration, jwtConfigureOptions);
 
             // services.AddCustomCors();
 
