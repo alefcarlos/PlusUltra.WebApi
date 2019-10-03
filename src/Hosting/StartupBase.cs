@@ -38,7 +38,7 @@ namespace PlusUltra.WebApi.Hosting
             if (useAuthentication)
                 services.AddSecurity(Configuration);
 
-            services.AddCustomCors();
+            // services.AddCustomCors();
 
             services.AddHealthCheck();
 
@@ -65,7 +65,7 @@ namespace PlusUltra.WebApi.Hosting
             if (useAuthentication)
                 app.UseAuthentication();
 
-            app.UseCustomCors();
+            // app.UseCustomCors();
 
             app.UseHealthCheck();
 
