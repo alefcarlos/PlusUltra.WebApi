@@ -13,7 +13,8 @@ namespace PlusUltra.WebApi.Hosting
                     builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials());
             });
 
             return services;

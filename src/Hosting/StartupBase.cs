@@ -69,6 +69,8 @@ namespace PlusUltra.WebApi.Hosting
 
             app.UseHealthCheck();
 
+            ConfigureBeforeMVC(app, env);
+
             app.UseMiddleware<HttpExceptionMiddleware>()
                 .UseMvc();
 
@@ -78,6 +80,8 @@ namespace PlusUltra.WebApi.Hosting
         }
 
         public abstract void BeforeConfigureApp(IApplicationBuilder app, IHostingEnvironment env);
+
+        public abstract void ConfigureBeforeMVC(IApplicationBuilder app, IHostingEnvironment env);
 
         public abstract void AfterConfigureApp(IApplicationBuilder app, IHostingEnvironment env);
     }
