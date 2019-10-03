@@ -14,5 +14,7 @@ namespace Package.WebApi.Controllers.Responses
         public IEnumerable<T> Items { get; }
         public Uri NextPage { get; set; }
         public Uri PreviousPage { get; set; }
+        public long TotalItems { get; set; }
+        public int TotalPages { get; set; }
     }
 }
