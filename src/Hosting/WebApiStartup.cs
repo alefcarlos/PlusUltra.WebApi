@@ -13,6 +13,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PlusUltra.WebApi.Middlewares;
 
 namespace PlusUltra.WebApi.Hosting
 {
@@ -31,6 +32,7 @@ namespace PlusUltra.WebApi.Hosting
 
         private readonly Action<JwtBearerOptions> jwtConfigureOptions;
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -46,14 +48,18 @@ namespace PlusUltra.WebApi.Hosting
 
             services.AddMetrics();
 
-            AfterConfigureServices(services, logger);
+            AfterConfigureServices(services);
         }
 
-        public abstract void AfterConfigureServices(IServiceCollection services, ILogger<WebApiStartup> logger);
+        public abstract void AfterConfigureServices(IServiceCollection services);
+
+        public abstract void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILogger<WebApiStartup> logger )
         {
+            app.UseErrorMiddleware(env, logger);
+            
             BeforeConfigureApp(app, env);
 
             app.UseRouting();
@@ -83,11 +89,9 @@ namespace PlusUltra.WebApi.Hosting
             AfterConfigureApp(app, env);
         }
 
-        public abstract void MapEndpoints(IEndpointRouteBuilder endpoints);
-
-        public abstract void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
-
         public abstract void ConfigureAfterRouting(IApplicationBuilder app, IWebHostEnvironment env);
+
+        public abstract void MapEndpoints(IEndpointRouteBuilder endpoints);
 
         public abstract void AfterConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
     }

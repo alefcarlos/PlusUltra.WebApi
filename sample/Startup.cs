@@ -5,13 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
+using PlusUltra.Swagger.Extensions;
 using PlusUltra.WebApi.Hosting;
 
 namespace sample
 {
     public class Startup : WebApiStartup
     {
-
         public Startup(IConfiguration configuration)
             : base(configuration, useAuthentication: true, jwtConfigureOptions: null)
         {
@@ -21,20 +23,23 @@ namespace sample
         {
         }
 
-        public override void AfterConfigureServices(IServiceCollection services, ILogger<WebApiStartup> logger)
+        public override void AfterConfigureServices(IServiceCollection services)
         {
-
+            services.AddDocumentation(new OpenApiInfo
+            {
+                Title = "Sample WebApi"
+            });
         }
 
         public override void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
+                //app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
-
         }
 
         public override void ConfigureAfterRouting(IApplicationBuilder app, IWebHostEnvironment env)

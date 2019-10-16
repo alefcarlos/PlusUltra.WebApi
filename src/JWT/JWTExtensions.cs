@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +18,8 @@ namespace PlusUltra.WebApi.JWT
 
             services.AddAuthentication(authOptions =>
                         {
-                            authOptions.DefaultAuthenticateScheme = "Bearer";
-                            authOptions.DefaultChallengeScheme = "Bearer";
+                            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                         }).AddJwtBearer(options =>
                         {
                             options.Authority = tokenConfigurations.oidc.Authority;
@@ -50,8 +51,11 @@ namespace PlusUltra.WebApi.JWT
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes("Bearer")
-                    .RequireAuthenticatedUser().Build());
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireClaim(ClaimTypes.NameIdentifier)
+                    .RequireClaim(ClaimTypes.Email)
+                    .RequireAuthenticatedUser()
+                    .Build());
             });
 
             return services;
