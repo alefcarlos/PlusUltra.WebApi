@@ -58,7 +58,7 @@ namespace PlusUltra.WebApi.Hosting
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILogger<WebApiStartup> logger )
         {
-            app.UseErrorMiddleware(env, logger);
+            app.UseErrorMiddleware(env);
             
             BeforeConfigureApp(app, env);
 

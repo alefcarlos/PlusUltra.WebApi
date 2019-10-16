@@ -9,7 +9,7 @@ namespace PlusUltra.WebApi.Middlewares
 {
     public static class ExceptionMiddleware
     {
-        public static IApplicationBuilder UseErrorMiddleware(this IApplicationBuilder app, IWebHostEnvironment env, ILogger<Hosting.WebApiStartup> logger)
+        public static IApplicationBuilder UseErrorMiddleware(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (!env.IsDevelopment()) return app;
             
@@ -17,8 +17,6 @@ namespace PlusUltra.WebApi.Middlewares
             {
                 appError.Run(async context =>
                 {
-                    logger.LogInformation("AppError");
-
                     context.Response.ContentType = "application/json";
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     await context.Response.WriteAsync(new { message = "Infelizmente ocorreu um erro não tratado." }.ToString());
