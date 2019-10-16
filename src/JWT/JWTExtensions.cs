@@ -17,8 +17,8 @@ namespace PlusUltra.WebApi.JWT
 
             services.AddAuthentication(authOptions =>
                         {
-                            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                            authOptions.DefaultAuthenticateScheme = "Bearer";
+                            authOptions.DefaultChallengeScheme = "Bearer";
                         }).AddJwtBearer(options =>
                         {
                             options.Authority = tokenConfigurations.oidc.Authority;
@@ -49,8 +49,8 @@ namespace PlusUltra.WebApi.JWT
             // a recursos deste projeto
             services.AddAuthorization(auth =>
             {
-                auth.AddPolicy(JwtBearerDefaults.AuthenticationScheme, new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes("Bearer")
                     .RequireAuthenticatedUser().Build());
             });
 
