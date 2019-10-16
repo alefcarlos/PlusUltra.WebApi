@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -49,9 +50,12 @@ namespace PlusUltra.WebApi.JWT
             // a recursos deste projeto
             services.AddAuthorization(auth =>
             {
-                auth.AddPolicy(JwtBearerDefaults.AuthenticationScheme, new AuthorizationPolicyBuilder()
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build());
+                    .RequireClaim(ClaimTypes.NameIdentifier)
+                    .RequireClaim(ClaimTypes.Email)
+                    .RequireAuthenticatedUser()
+                    .Build());
             });
 
             return services;
