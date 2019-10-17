@@ -41,8 +41,9 @@ namespace PlusUltra.WebApi.Hosting
 
             services.AddHealthChecks();
 
-            services.AddControllers
-                ().AddFluentValidation();
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true)
+                .AddFluentValidation();
 
             services.AddApiVersion();
 
@@ -56,10 +57,10 @@ namespace PlusUltra.WebApi.Hosting
         public abstract void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILogger<WebApiStartup> logger )
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILogger<WebApiStartup> logger)
         {
             app.UseErrorMiddleware(env);
-            
+
             BeforeConfigureApp(app, env);
 
             app.UseRouting();
