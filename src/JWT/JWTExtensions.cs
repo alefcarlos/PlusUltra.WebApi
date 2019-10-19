@@ -39,7 +39,7 @@ namespace PlusUltra.WebApi.JWT
                                 ValidateAudience = false,
                                 ValidAudience = tokenConfigurations.oidc.Audience,
 
-                                ValidIssuer = tokenConfigurations.oidc.Authority
+                                ValidIssuer = tokenConfigurations.oidc.Issuer
                             };
 
                             if (jwtConfigureOptions != null)
