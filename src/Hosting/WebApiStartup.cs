@@ -1,13 +1,10 @@
 ﻿using System;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PlusUltra.Swagger.Extensions;
 using PlusUltra.WebApi.JWT;
-using PlusUltra.WebApi.Versioning;
 using Microsoft.AspNetCore.Hosting;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -45,8 +42,6 @@ namespace PlusUltra.WebApi.Hosting
                 .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true)
                 .AddFluentValidation();
 
-            services.AddApiVersion();
-
             services.AddMetrics();
 
             AfterConfigureServices(services);
@@ -57,7 +52,7 @@ namespace PlusUltra.WebApi.Hosting
         public abstract void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILogger<WebApiStartup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<WebApiStartup> logger)
         {
             app.UseErrorMiddleware(env);
 
@@ -72,8 +67,6 @@ namespace PlusUltra.WebApi.Hosting
                 app.UseAuthorization();
                 app.UseAuthentication();
             }
-
-            app.UseDocumentation(provider);
 
             app.UseEndpoints(endpoints =>
             {

@@ -8,4 +8,8 @@
     <ProjectReference Include="..\src\PlusUltra.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PlusUltra.Swagger" Version="1.1.0" />
+  </ItemGroup>
+
 </Project>

@@ -21,6 +21,10 @@ namespace sample
 
         public override void AfterConfigureApp(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseDocumentation(configuration: c =>
+            {
+                c.DocumentTitle = "Sample WebApi";
+            });
         }
 
         public override void AfterConfigureServices(IServiceCollection services)

@@ -6,8 +6,7 @@ using PlusUltra.WebApi.Controllers;
 namespace sample.Controllers
 {
     [Authorize(JwtBearerDefaults.AuthenticationScheme)]
-    [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
+    [Route("[controller]")]
     public class ValuesController : WebApiController
     {
         [AllowAnonymous]
