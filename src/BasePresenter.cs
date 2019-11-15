@@ -1,7 +1,7 @@
 using Flunt.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace PlusUltra.WebApi
 {
     public class BasePresenter
     {
