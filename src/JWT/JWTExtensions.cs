@@ -36,7 +36,7 @@ namespace PlusUltra.WebApi.JWT
                                 RequireExpirationTime = true,
                                 ValidateLifetime = true,
 
-                                ValidateAudience = false,
+                                ValidateAudience = true,
                                 ValidAudience = tokenConfigurations.oidc.Audience,
 
                                 ValidIssuer = tokenConfigurations.oidc.Issuer

@@ -18,10 +18,5 @@ namespace PlusUltra.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         protected string GetUserEmail() => User.FindFirst(ClaimTypes.Email).Value;
-
-        protected UnprocessableEntityObjectResult ValidationError(Notifiable validation)
-        {
-            return UnprocessableEntity(validation.Notifications);
-        }
     }
 }

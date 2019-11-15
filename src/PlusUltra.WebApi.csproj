@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-  </PropertyGroup>
+        <Authors>Alef Carlos</Authors>
+        <Company>PlusUltra</Company>
+        <PackageTags>Library with various web standards</PackageTags>
+        <PackageProjectUrl>https://github.com/alefcarlos/PlusUltra.WebApi</PackageProjectUrl>
+        <Description>WebApi Standards</Description>
+	</PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
