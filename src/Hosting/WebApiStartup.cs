@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PlusUltra.WebApi.Middlewares;
+using System.Text.Json.Serialization;
 
 namespace PlusUltra.WebApi.Hosting
 {
@@ -39,7 +40,11 @@ namespace PlusUltra.WebApi.Hosting
             services.AddHealthChecks();
 
             services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true)
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
                 .AddFluentValidation();
 
             services.AddMetrics();
