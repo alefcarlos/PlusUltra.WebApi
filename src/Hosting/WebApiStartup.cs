@@ -13,19 +13,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PlusUltra.WebApi.Middlewares;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace PlusUltra.WebApi.Hosting
 {
     public abstract class WebApiStartup
     {
-        public WebApiStartup(IConfiguration configuration, bool useAuthentication, Action<JwtBearerOptions> jwtConfigureOptions = null)
+        public WebApiStartup(IConfiguration configuration, IWebHostEnvironment environment, bool useAuthentication, Action<JwtBearerOptions> jwtConfigureOptions = null)
         {
             Configuration = configuration;
             this.useAuthentication = useAuthentication;
             this.jwtConfigureOptions = jwtConfigureOptions;
+            this.environment = environment;
         }
 
         protected readonly IConfiguration Configuration;
+        protected readonly IWebHostEnvironment environment;
 
         protected readonly bool useAuthentication;
 
@@ -36,7 +39,7 @@ namespace PlusUltra.WebApi.Hosting
         public void ConfigureServices(IServiceCollection services)
         {
             if (useAuthentication)
-                services.AddSecurity(Configuration, jwtConfigureOptions);
+                services.AddSecurity(Configuration, environment.IsProduction(), jwtConfigureOptions);
 
             services.AddHealthChecks();
 
@@ -55,18 +58,18 @@ namespace PlusUltra.WebApi.Hosting
 
         public abstract void AfterConfigureServices(IServiceCollection services);
 
-        public abstract void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
+        public abstract void BeforeConfigureApp(IApplicationBuilder app);
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<WebApiStartup> logger)
+        public void Configure(IApplicationBuilder app, ILogger<WebApiStartup> logger)
         {
-            app.UseErrorMiddleware(env);
+            app.UseErrorMiddleware(environment);
 
-            BeforeConfigureApp(app, env);
+            BeforeConfigureApp(app);
 
             app.UseRouting();
 
-            ConfigureAfterRouting(app, env);
+            ConfigureAfterRouting(app);
 
             if (useAuthentication)
             {
@@ -87,17 +90,17 @@ namespace PlusUltra.WebApi.Hosting
                 {
                     await context.Response.WriteAsync("Ok");
                 });
-                
+
                 MapEndpoints(endpoints);
             });
 
-            AfterConfigureApp(app, env);
+            AfterConfigureApp(app);
         }
 
-        public abstract void ConfigureAfterRouting(IApplicationBuilder app, IWebHostEnvironment env);
+        public abstract void ConfigureAfterRouting(IApplicationBuilder app);
 
         public abstract void MapEndpoints(IEndpointRouteBuilder endpoints);
 
-        public abstract void AfterConfigureApp(IApplicationBuilder app, IWebHostEnvironment env);
+        public abstract void AfterConfigureApp(IApplicationBuilder app);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,20 +12,19 @@ namespace PlusUltra.WebApi.JWT
 {
     public static class JWTExtensions
     {
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, Action<JwtBearerOptions> jwtConfigureOptions = null)
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, bool isProduction, Action<JwtBearerOptions> jwtConfigureOptions = null)
         {
             services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
             var tokenConfigurations = services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettings>>().Value;
 
-            services.AddAuthentication(authOptions =>
+            var auth = services.AddAuthentication(authOptions =>
                         {
                             authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                             authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                         }).AddJwtBearer(options =>
                         {
-                            options.Authority = tokenConfigurations.oidc.Authority;
-
-                            options.RequireHttpsMetadata = false;
+                            //options.Authority = tokenConfigurations.oidc.Authority;
+                            options.RequireHttpsMetadata = isProduction;
 
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
@@ -32,13 +32,22 @@ namespace PlusUltra.WebApi.JWT
                                 // We recommend 5 minutes or less:
                                 ClockSkew = TimeSpan.FromMinutes(5),
                                 RequireSignedTokens = false,
-                                // Ensure the token hasn't expired:
-                                RequireExpirationTime = true,
-                                ValidateLifetime = true,
 
-                                ValidateAudience = true,
+                                SignatureValidator = delegate (string token, TokenValidationParameters validationParameters)
+                                {
+                                    return new JwtSecurityToken(token);
+                                },
+
+                                ValidateIssuerSigningKey = false,
+
+                                // Ensure the token hasn't expired:
+                                RequireExpirationTime = false,
+                                ValidateLifetime = false,
+
+                                ValidateAudience = isProduction,
                                 ValidAudience = tokenConfigurations.oidc.Audience,
 
+                                ValidateIssuer = isProduction,
                                 ValidIssuer = tokenConfigurations.oidc.Issuer
                             };
 
@@ -50,7 +59,7 @@ namespace PlusUltra.WebApi.JWT
             // a recursos deste projeto
             services.AddAuthorization(auth =>
             {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                auth.AddPolicy(JwtBearerDefaults.AuthenticationScheme, new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.NameIdentifier)
                     .RequireClaim(ClaimTypes.Email)

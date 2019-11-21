@@ -14,12 +14,12 @@ namespace sample
 {
     public class Startup : WebApiStartup
     {
-        public Startup(IConfiguration configuration)
-            : base(configuration, useAuthentication: true, jwtConfigureOptions: null)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+            : base(configuration, env, useAuthentication: true)
         {
         }
 
-        public override void AfterConfigureApp(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void AfterConfigureApp(IApplicationBuilder app)
         {
             app.UseDocumentation(configuration: c =>
             {
@@ -35,9 +35,9 @@ namespace sample
             });
         }
 
-        public override void BeforeConfigureApp(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void BeforeConfigureApp(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 IdentityModelEventSource.ShowPII = true;
                 //app.UseDeveloperExceptionPage();
@@ -48,7 +48,7 @@ namespace sample
             app.UsePathBase("/v1/sample/");
         }
 
-        public override void ConfigureAfterRouting(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void ConfigureAfterRouting(IApplicationBuilder app)
         {
 
         }
