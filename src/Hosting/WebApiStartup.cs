@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PlusUltra.WebApi.Middlewares;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 
 namespace PlusUltra.WebApi.Hosting
 {
@@ -82,6 +83,11 @@ namespace PlusUltra.WebApi.Hosting
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
 
+                endpoints.MapGet("/liveness", async context =>
+                {
+                    await context.Response.WriteAsync("Ok");
+                });
+                
                 MapEndpoints(endpoints);
             });
 
