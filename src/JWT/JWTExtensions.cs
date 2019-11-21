@@ -44,11 +44,11 @@ namespace PlusUltra.WebApi.JWT
                                 RequireExpirationTime = false,
                                 ValidateLifetime = false,
 
-                                ValidateAudience = isProduction,
-                                ValidAudience = tokenConfigurations.oidc.Audience,
+                                ValidateAudience = false,
+                                //ValidAudience = tokenConfigurations.oidc.Audience,
 
-                                ValidateIssuer = isProduction,
-                                ValidIssuer = tokenConfigurations.oidc.Issuer
+                                ValidateIssuer = false,
+                                //ValidIssuer = tokenConfigurations.oidc.Issuer
                             };
 
                             if (jwtConfigureOptions != null)
