@@ -44,6 +44,8 @@ namespace sample
             }
 
             app.UseHttpsRedirection();
+
+            app.UsePathBase("/v1/sample/");
         }
 
         public override void ConfigureAfterRouting(IApplicationBuilder app, IWebHostEnvironment env)
