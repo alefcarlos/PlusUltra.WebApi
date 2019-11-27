@@ -17,7 +17,7 @@
     <PackageReference Include="App.Metrics.AspNetCore" Version="3.2.0" />
     <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="3.2.0" />
     <PackageReference Include="App.Metrics.Formatters.Prometheus" Version="3.2.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.System" Version="3.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="3.0.3" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="3.0.0" />
     <PackageReference Include="GitVersionTask" Version="5.1.2">
       <PrivateAssets>all</PrivateAssets>

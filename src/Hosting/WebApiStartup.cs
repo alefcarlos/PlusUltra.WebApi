@@ -14,6 +14,9 @@ using PlusUltra.WebApi.Middlewares;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace PlusUltra.WebApi.Hosting
 {
@@ -52,6 +55,15 @@ namespace PlusUltra.WebApi.Hosting
                 .AddFluentValidation();
 
             services.AddMetrics();
+
+            // https://benfoster.io/blog/injecting-urlhelper-in-aspnet-core-mvc
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(x =>
+            {
+                var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                var factory = x.GetRequiredService<IUrlHelperFactory>();
+                return factory.GetUrlHelper(actionContext);
+            });
 
             AfterConfigureServices(services);
         }
