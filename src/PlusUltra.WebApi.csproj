@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-        <Authors>Alef Carlos</Authors>
-        <Company>PlusUltra</Company>
-        <PackageTags>Library with various web standards</PackageTags>
-        <PackageProjectUrl>https://github.com/alefcarlos/PlusUltra.WebApi</PackageProjectUrl>
-        <Description>WebApi Standards</Description>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Alef Carlos</Authors>
+    <Company>PlusUltra</Company>
+    <PackageTags>Library with various web standards</PackageTags>
+    <PackageProjectUrl>https://github.com/alefcarlos/PlusUltra.WebApi</PackageProjectUrl>
+    <Description>WebApi Standards</Description>
 	</PropertyGroup>
 
   <ItemGroup>
@@ -18,16 +18,16 @@
     <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="3.2.0" />
     <PackageReference Include="App.Metrics.Formatters.Prometheus" Version="3.2.0" />
     <PackageReference Include="AspNetCore.HealthChecks.System" Version="3.0.3" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="3.0.0" />
-    <PackageReference Include="GitVersionTask" Version="5.1.2">
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="3.0.2" />
+    <PackageReference Include="GitVersionTask" Version="5.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authorization.Policy" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Flunt" Version="1.0.4" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
   </ItemGroup>
 
 </Project>
