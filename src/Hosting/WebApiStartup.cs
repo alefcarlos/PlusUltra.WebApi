@@ -16,6 +16,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using App.Metrics;
+using App.Metrics.Formatters.Prometheus;
+using System.Linq;
 
 namespace PlusUltra.WebApi.Hosting
 {
@@ -52,8 +55,6 @@ namespace PlusUltra.WebApi.Hosting
                 })
                 .AddFluentValidation();
 
-            services.AddMetrics();
-
             // https://benfoster.io/blog/injecting-urlhelper-in-aspnet-core-mvc
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(x =>
@@ -62,6 +63,26 @@ namespace PlusUltra.WebApi.Hosting
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
                 return factory.GetUrlHelper(actionContext);
             });
+
+
+            var metrics = AppMetrics.CreateDefaultBuilder()
+                .OutputMetrics.AsPrometheusPlainText()
+                .OutputMetrics.AsPrometheusProtobuf()
+                .Build();
+
+            DiagnosticSourceAdapter.StartListening(metrics, new DiagnosticSourceAdapterOptions
+            {
+                ListenerFilterPredicate = (d) => true
+            });
+
+            services.AddMetricsTrackingMiddleware();
+            services.AddMetricsReportingHostedService();
+            services.AddMetricsEndpoints(options =>
+            {
+                options.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusTextOutputFormatter>().First();
+            });
+
+            services.AddMetrics(metrics);
 
             AfterConfigureServices(services);
         }
@@ -73,11 +94,14 @@ namespace PlusUltra.WebApi.Hosting
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILogger<WebApiStartup> logger)
         {
+            app.UseMetricsAllMiddleware();
             app.UseErrorMiddleware(environment);
 
             BeforeConfigureApp(app);
 
             app.UseRouting();
+
+            app.UseAppMetricsEndpointRoutesResolver();
 
             ConfigureAfterRouting(app);
 
@@ -105,6 +129,8 @@ namespace PlusUltra.WebApi.Hosting
             });
 
             AfterConfigureApp(app);
+
+            app.UseMetricsAllEndpoints();
         }
 
         public abstract void ConfigureAfterRouting(IApplicationBuilder app);
